@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent none
 
     stages {
         stage('Unit Tests - Backend') {
@@ -7,12 +7,15 @@ pipeline {
                 docker {
                     image 'marcosmrls/golang-junit:latest'
                     reuseNode true
+                    args '''--platform linux/amd64
+                          -e GOCACHE=/tmp/go-build
+                          -v $WORKSPACE/.go-cache:/tmp/go-build'''
                 }
             }
             steps {
-                dir('bugtracker-backend') {  // <- Abre el bloque con {
-                    sh 'go test -v ./...'   // Este comando se ejecutará dentro de bugtracker-backend
-                }                            // <- Cierra el bloque con }
+                dir('bugtracker-backend') {
+                    sh 'go test -v ./...'
+                }
             }
         }
     }
