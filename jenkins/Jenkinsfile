@@ -7,14 +7,11 @@ pipeline {
                 docker {
                     image 'marcosmrls/golang-junit:latest'
                     reuseNode true
-                    args '''--platform linux/amd64
-                          -e GOCACHE=/tmp/go-build
-                          -v $WORKSPACE/.go-cache:/tmp/go-build'''
                 }
             }
             steps {
                 dir('bugtracker-backend') {
-                    sh 'go test -v ./...'
+                    sh 'export GOCACHE=/tmp/go-build && go test -v ./...'
                 }
             }
         }
