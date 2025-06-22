@@ -3,6 +3,12 @@ pipeline {
 
     stages {
         stage('Unit Tests - Backend') {
+            agent {
+                docker {
+                    image 'snakee/golang-junit:1.21'
+                    reuseNode true
+                }
+            }
             steps {
                 dir('bugtracker-backend') {  // <- Abre el bloque con {
                     sh 'go test -v ./...'   // Este comando se ejecutará dentro de bugtracker-backend
