@@ -1,17 +1,18 @@
 pipeline {
-    agent none
+    agent any
 
     stages {
         stage('Unit Tests - Backend') {
             agent {
                 docker {
-                    image 'marcosmrls/golang-junit:latest'
+                    image 'marcosmrls/golang-junit:latest'  // Tu imagen personalizada
                     reuseNode true
+                    args '--platform linux/amd64 -e GOCACHE=/tmp/go-build'  // Clave: define GOCACHE aquí
                 }
             }
             steps {
                 dir('bugtracker-backend') {
-                    sh 'export GOCACHE=/tmp/go-build && go test -v ./...'
+                    sh 'go test -v ./...'  // Ya no necesitas el export aquí
                 }
             }
         }
